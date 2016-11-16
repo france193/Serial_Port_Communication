@@ -6,7 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
-import library.rxtx.*;
+//import library.rxtx.*;
+import gnu.io.*;
 
 /**
  * Created by FLDeviOS on 22/10/2016.
@@ -194,7 +195,7 @@ public class SerialRxTx implements SerialPortEventListener {
     }
 
     public void listPorts() {
-        java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
+        Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
 
         System.out.println("\nAvailable serial ports:");
         while (portEnum.hasMoreElements()) {

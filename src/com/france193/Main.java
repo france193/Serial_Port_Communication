@@ -19,6 +19,6 @@ public class Main implements ATCommand {
         serial.listPorts();
         System.out.println("\nConnecting to " + PORT);
         serial.initialize();
-        //serial.write(at_hwgetdietemp);
+        serial.write(at_hwgetdietemp);
     }
 }
