@@ -1,16 +1,12 @@
 package com.france193;
 
 import java.io.*;
-import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
-import gnu.io.*;
-
-import javax.activation.DataSource;
-//import javax.comm.*;
+import library.rxtx.*;
 
 /**
  * Created by FLDeviOS on 22/10/2016.

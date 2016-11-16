@@ -1,7 +1,8 @@
 package com.france193;
 
-import gnu.io.*;
-
+/**
+ * Created by FLDeviOS on 22/10/2016.
+ */
 public class Main implements ATCommand {
 
     //TIMEOUT
@@ -14,14 +15,10 @@ public class Main implements ATCommand {
     private static final String PORT = "/dev/cu.usbserial-AI02KIFG";
 
     public static void main(String[] args) {
-
         SerialRxTx serial = new SerialRxTx(TIME_OUT, BAUDRATE, PORT);
         serial.listPorts();
         System.out.println("\nConnecting to " + PORT);
         serial.initialize();
         //serial.write(at_hwgetdietemp);
     }
-
 }
-
-
