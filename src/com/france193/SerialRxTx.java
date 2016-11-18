@@ -6,7 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
-//import library.rxtx.*;
+//import library.RXTXComm_decompiled.*;
+//import library.JSerialComm.*;
 import gnu.io.*;
 
 /**
@@ -112,7 +113,7 @@ public class SerialRxTx implements SerialPortEventListener {
                 "','" + infoList.get(7).toString() +
                 "','" + latitude.toString() +
                 "\\'','" + longitude.toString() +
-                "\\'','" + infoList.get(9).toString() +"');";
+                "\\'','" + infoList.get(9).toString() + "');";
 
         try {
             String filename = "Geolocation_logging.txt";
@@ -186,7 +187,9 @@ public class SerialRxTx implements SerialPortEventListener {
     }
 
     public void write(String message) {
-        System.out.println("-> TX: " + message);
+        System.out.println(" (TX) > writing: \"" +
+                message.replace("\n","").replace("\r","") +
+                "\" to Serial...");
         try {
             output.write(message.getBytes());
         } catch (IOException e) {
