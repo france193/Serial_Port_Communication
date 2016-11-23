@@ -6,14 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
-//import library.RXTXComm_decompiled.*;
-//import library.JSerialComm.*;
-import gnu.io.*;
+import com.fazecast.jSerialComm.*;
 
 /**
  * Created by FLDeviOS on 22/10/2016.
  */
-public class SerialRxTx implements SerialPortEventListener {
+public class SerialRxTx {
 
     /*
     Connection conn = null;
@@ -22,7 +20,7 @@ public class SerialRxTx implements SerialPortEventListener {
     String driver = "com.mysql.jdbc.Driver";
     String userName = "root";
     String password = "Thisistherootpassword";
-    */
+
 
     private static boolean GPS = true;
     private static int timeout;
@@ -124,7 +122,7 @@ public class SerialRxTx implements SerialPortEventListener {
             System.err.println("IOException: " + ioe.getMessage());
         }
 
-        /*
+
         //saving into databse
         try {
             Connection conn = dataSource.getConnection();
@@ -138,7 +136,7 @@ public class SerialRxTx implements SerialPortEventListener {
             Logger lgr = Logger.getLogger(SerialRxTx.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
-        */
+
 
         //debug printing
         System.out.println("-----> GEOLOCATION REPORT #" + counter + "<-----\n" +
@@ -223,5 +221,5 @@ public class SerialRxTx implements SerialPortEventListener {
                 return "unknown type";
         }
     }
-
+    */
 }
