@@ -8,10 +8,11 @@ public class Main implements ATCommand {
     //BAUDRATE
     private static final int BAUDRATE = 9600;
 
-    //SERIAL PORT NAME
-    private static final String PORT = "cu.usbserial-AI02KIFG";
+    //SERIAL PORT NAME BASED ON OS
+    private static final String PORT_MAC = "cu.usbserial-AI02KIFG";
+    private static final String PORT_RASPBERRY = "ttyUSB0";
 
     public static void main(String[] args) {
-        SerialRxTx serial = new SerialRxTx(BAUDRATE, PORT);
+        SerialRxTx serial = new SerialRxTx(BAUDRATE, args[0].toString());
     }
 }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Serial_Port_Communiction.iml" filepath="$PROJECT_DIR$/Serial_Port_Communiction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Serial_Port_Communication.iml" filepath="$PROJECT_DIR$/Serial_Port_Communication.iml" />
     </modules>
   </component>
 </project>

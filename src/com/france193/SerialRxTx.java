@@ -16,38 +16,70 @@ public class SerialRxTx {
 
         serialPorts = new HashMap<>();
 
-        readAllPortsAvailable();
-        printAllPortsAvailable();
+        try {
+            // read all ports
+            readAllPortsAvailable();
 
-        serialPort = findPort(portNAme);
+            // prints all ports
+            printAllPortsAvailable();
 
-        System.out.println("> Setting baudrate: " + baudrate);
-        serialPort.setBaudRate(baudrate);
-
-        System.out.println("> Opening port...");
-        if (serialPort.openPort()) {
-            System.out.println("> Port correctly opened!");
-        } else {
-            System.out.println("(!) error opening port!");
-            System.exit(1);
-        }
-
-        serialPort.addDataListener(new SerialPortDataListener() {
-            @Override
-            public int getListeningEvents() {
-                return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
+            // retrive required port
+            if ( (serialPort = findPort(portNAme)) == null) {
+                System.out.println("(!) error, port not found!");
+                System.exit(2);
             }
 
-            @Override
-            public void serialEvent(SerialPortEvent event) {
-                if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
-                    return;
+            /*
+            // if it is already opened, close it
+            if (serialPort.isOpen()) {
+                System.out.println("> Port is already in use, closing port... ");
+                serialPort.closePort();
+                System.out.println("> Port correctly closed!");
+            }
+            */
+
+            // open port and set baudrate required
+            System.out.println("> Opening port...");
+            if (serialPort.openPort()) {
+                System.out.println("> Port correctly opened!");
+                System.out.println("> Setting baudrate: " + baudrate + "...");
+                serialPort.setBaudRate(baudrate);
+                System.out.println("> Baudrate correctly setted!");
+            } else {
+                System.out.println("(!) error opening port!");
+                System.exit(1);
+            }
+
+            System.out.println("> Setting data listener...");
+            serialPort.addDataListener(new SerialPortDataListener() {
+                @Override
+                public int getListeningEvents() {
+                    return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
                 }
-                byte[] newData = new byte[serialPort.bytesAvailable()];
-                int numRead = serialPort.readBytes(newData, newData.length);
-                System.out.println("Read " + numRead + " bytes.");
-            }
-        });
+
+                @Override
+                public void serialEvent(SerialPortEvent event) {
+                    if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
+                        return;
+                    }
+                    byte[] newData = new byte[serialPort.bytesAvailable()];
+                    int numRead = serialPort.readBytes(newData, newData.length);
+                    System.out.println("Read " + numRead + " bytes.");
+                }
+            });
+            System.out.println("> Listener correctly setted!");
+
+            System.out.println("> Waiting for reading data from port...");
+
+            System.out.println("> Closing port... ");
+            serialPort.closePort();
+            System.out.println("> Port correctly closed!");
+
+        } catch (NullPointerException e) {
+            System.out.println("(!) Error -> NullPointerException " + e.getMessage());
+            e.printStackTrace();
+            System.exit(2);
+        }
     }
 
     private void readAllPortsAvailable() {
@@ -69,8 +101,21 @@ public class SerialRxTx {
     }
 
     private SerialPort findPort(String portName) {
-        System.out.println("Find port: " + portName);
-        return serialPorts.get(portName);
+        System.out.println("> Finding port: " + portName + "... ");
+
+        if (portName == null) {
+            System.out.println("(!) error, incorrect port name.");
+            return null;
+        }
+
+        SerialPort s = serialPorts.get(portName.toString());
+
+        if (s != null) {
+            System.out.println("> Port found!");
+            return s;
+        }
+
+        return null;
     }
 
     /*
