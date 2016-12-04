@@ -2,6 +2,8 @@ package com.france193;
 
 import com.fazecast.jSerialComm.*;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -11,6 +13,8 @@ public class SerialRxTx {
 
     private HashMap<String, SerialPort> serialPorts;
     private SerialPort serialPort;
+    private InputStream inputStream;
+    private OutputStream outputStream;
 
     public SerialRxTx(int baudrate, String portNAme) {
 
@@ -24,7 +28,7 @@ public class SerialRxTx {
             printAllPortsAvailable();
 
             // retrive required port
-            if ( (serialPort = findPort(portNAme)) == null) {
+            if ((serialPort = findPort(portNAme)) == null) {
                 System.out.println("(!) error, port not found!");
                 System.exit(2);
             }
@@ -50,7 +54,13 @@ public class SerialRxTx {
                 System.exit(1);
             }
 
-            System.out.println("> Setting data listener...");
+            // getting input and output stream from serialPort
+            inputStream = serialPort.getInputStream();
+            outputStream = serialPort.getOutputStream();
+
+            serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 100, 100);
+
+            System.out.println("> Setting data listener for read data...");
             serialPort.addDataListener(new SerialPortDataListener() {
                 @Override
                 public int getListeningEvents() {
@@ -59,21 +69,24 @@ public class SerialRxTx {
 
                 @Override
                 public void serialEvent(SerialPortEvent event) {
-                    if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
+                    // Understand what event is
+                    if (event.getEventType() == SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
+                        // Read event
+                        try {
+                            serialRX();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            System.out.println("(!) error, reading from SerialPort.");
+                        }
+                    } else {
+                        // All other events
                         return;
                     }
-                    byte[] newData = new byte[serialPort.bytesAvailable()];
-                    int numRead = serialPort.readBytes(newData, newData.length);
-                    System.out.println("Read " + numRead + " bytes.");
                 }
             });
-            System.out.println("> Listener correctly setted!");
+            System.out.println("> Listeners correctly setted!");
 
             System.out.println("> Waiting for reading data from port...");
-
-            System.out.println("> Closing port... ");
-            serialPort.closePort();
-            System.out.println("> Port correctly closed!");
 
         } catch (NullPointerException e) {
             System.out.println("(!) Error -> NullPointerException " + e.getMessage());
@@ -116,6 +129,56 @@ public class SerialRxTx {
         }
 
         return null;
+    }
+
+    public void serialTX(String toWrite) {
+        System.out.println("> Writing: \"" + toWrite.replace("\n", "") + "\"... ");
+
+        if (toWrite == null) {
+            System.out.println("(!) error, writing to SerialPort.");
+            return;
+        }
+
+        byte[] bytes_array = toWrite.getBytes(StandardCharsets.UTF_8);
+        int toWtriteByte = bytes_array.length;
+        int writtenByre = serialPort.writeBytes(bytes_array, Integer.toUnsignedLong(bytes_array.length));
+
+        if ( toWtriteByte != writtenByre ) {
+            System.out.println("(!) error, writing to SerialPort.");
+        } else {
+            System.out.println("> correctly written " + writtenByre + " byte");
+        }
+    }
+
+    public void serialRX() throws IOException {
+        String s = readLine();
+        System.out.println("> I read this line: \"" + s + "\"");
+    }
+
+    public String readLine() throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        int c;
+        for (c = inputStream.read(); c != '\n' && c != -1 ; c = inputStream.read()) {
+            byteArrayOutputStream.write(c);
+        }
+        if (c == -1 && byteArrayOutputStream.size() == 0) {
+            return null;
+        }
+        String line = byteArrayOutputStream.toString("UTF-8");
+        return line;
+    }
+
+    public void close() {
+        System.out.println("> Closing port... ");
+        serialPort.closePort();
+        serialPort.removeDataListener();
+        try {
+            outputStream.close();
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("> Port correctly closed!");
     }
 
     /*

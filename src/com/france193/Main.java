@@ -13,6 +13,17 @@ public class Main implements ATCommand {
     private static final String PORT_RASPBERRY = "ttyUSB0";
 
     public static void main(String[] args) {
-        SerialRxTx serial = new SerialRxTx(BAUDRATE, args[0].toString());
+
+        SerialRxTx serial;
+
+        if (args.length != 0) {
+            serial = new SerialRxTx(BAUDRATE, args[0].toString());
+        } else {
+            serial = new SerialRxTx(BAUDRATE, PORT_MAC);
+        }
+
+        serial.serialTX("Ciao, io sono francesco\nCiao, io sono francesco\n");
+        serial.serialTX("Ciao, io sono francesco\n");
+        //serial.close();
     }
 }
