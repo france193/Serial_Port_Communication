@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+System.out.println("GEOLOCATION REPORT #" + counter + "\n" +
+        //" * [time (hh:mm:ss)] - "+String.format("%02d",h)+":"+String.format("%02d",m)+":"+String.format("%02d",s)+"\n"+
+        " * [time (hh:mm:ss)] * " + dateFormat.format(date) + "\n" +
+        " * [latitude (N)]    * " + latitude + "\n" +
+        " * [longitude (E)]   * " + longitude + "\n" +
+        " * [fix (ok if >0)]  * " + infoList.get(6).toString() + "\n" +
+        " * [satellites (#)]  * " + infoList.get(7).toString() + "\n" +
+        " * [altitude (m)]    * " + infoList.get(9).toString() + "\n");
+-->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="https://france193.wordpress.com"
+            xmlns:flo="https://france193.wordpress.com"
+            elementFormDefault="qualified">
+</xsd:schema>
